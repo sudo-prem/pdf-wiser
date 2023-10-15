@@ -1,1 +1,1 @@
-# tokeniser
+# star-tokenizer
