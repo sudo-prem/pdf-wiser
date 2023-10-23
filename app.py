@@ -19,9 +19,16 @@ if model_name:
     # Initialize the token count output
     token_count = 0
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    tokens = tokenizer.tokenize(tokenizer.decode(tokenizer.encode(user_input)))
-    st.markdown(f'{tokens}')
-    token_count = len(tokens)
 
-    # Display the token count in the output box
-    st.markdown(f'**Token Count:** {token_count}')
+    if user_input:
+        # Tokenize the user input
+        input_ids = tokenizer.encode(user_input, add_special_tokens=False)
+
+        # Get the token length
+        token_count = len(input_ids)
+
+        # Display the token count
+        st.markdown(f'Token Count: {token_count}')
+
+        # Display the tokens as well
+        st.markdown(f'Tokens: {input_ids}')
