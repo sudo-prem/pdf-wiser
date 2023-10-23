@@ -5,10 +5,16 @@ from transformers import AutoTokenizer
 st.title('star-tokenizer')
 
 # Create a dropdown to select options
-option = st.selectbox('Model', ['None', 'bert-base-uncased', 'NousResearch/Llama-2-7b-chat-hf',
-                      'mistralai/Mistral-7B-Instruct-v0.1', 'mistralai/Mistral-7B-v0.1'])
+option = st.selectbox('Model', [
+    'None',
+    'bert-base-uncased',
+    'NousResearch/Llama-2-7b-chat-hf',
+    'mistralai/Mistral-7B-Instruct-v0.1',
+    'mistralai/Mistral-7B-v0.1'
+])
+
 if option == 'None':
-    model_name = st.text_input("Enter hugging face model name")
+    model_name = st.text_input("Hugging Face model name")
 else:
     model_name = option
 
@@ -23,12 +29,16 @@ if model_name:
     if user_input:
         # Tokenize the user input
         input_ids = tokenizer.encode(user_input, add_special_tokens=False)
+        tokens = tokenizer.tokenize(tokenizer.decode(input_ids))
 
         # Get the token length
         token_count = len(input_ids)
 
+        # Display the tokens as words
+        st.markdown(f'Tokens: {tokens}')
+
+        # Display the tokens
+        st.markdown(f'Token Ids: {input_ids}')
+
         # Display the token count
         st.markdown(f'Token Count: {token_count}')
-
-        # Display the tokens as well
-        st.markdown(f'Tokens: {input_ids}')
