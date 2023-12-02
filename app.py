@@ -2,14 +2,13 @@ import streamlit as st
 from tokenizer import tokenizer
 from pdfwiser import pdfwiser
 
-# Set the title of the app
-st.title('star-tokenizer')
+# Set the default page to "Tokenizer"
+page = st.sidebar.selectbox("Select Page", ["Tokenizer", "PDFwiser"], index=0)
 
-# Create a sidebar with page selection
-page = st.sidebar.selectbox("Select Page", ["Tokenizer", "PDF Util"])
-
-# Display the selected page
+# Set the title based on the selected page
 if page == "Tokenizer":
+    st.title('Tokenizer')
     tokenizer()
-elif page == "PDF Util":
+elif page == "PDFwiser":
+    st.title('PDFwiser')
     pdfwiser()
