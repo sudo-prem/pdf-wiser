@@ -35,13 +35,13 @@ def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
     pdf_document.close()
 
     # Display the modified PDF using Streamlit
-    displayPDF(modified_pdf_bytes.getvalue())
+    display_PDF(modified_pdf_bytes.getvalue())
 
     # Remove the temporary file
     os.remove(temp_filename)
 
 
-def displayPDF(pdf_bytes):
+def display_PDF(pdf_bytes):
     base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
 
     pdf_display = f"""<embed
@@ -54,7 +54,7 @@ def displayPDF(pdf_bytes):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
-def pdfwiser():
+def pdf_wiser():
     # File uploader widget
     uploaded_file = st.file_uploader(
         "Choose a PDF file", type="pdf", key="pdf_uploader")
@@ -62,6 +62,9 @@ def pdfwiser():
     if uploaded_file is not None:
         # Read the file content as bytes
         pdf_bytes = uploaded_file.read()
+
+        # Enter user question
+        user_query = st.chat_input("Enter Question")
 
         # Define a list of words to highlight
         words_to_highlight = ["the", "it"]

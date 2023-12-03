@@ -1,6 +1,6 @@
 import streamlit as st
 from tokenizer import tokenizer
-from pdfwiser import pdfwiser
+from pdfwiser import pdf_wiser
 
 # Set the default page to "Tokenizer"
 page = st.sidebar.selectbox("Select Page", ["Tokenizer", "PDFwiser"], index=0)
@@ -11,4 +11,4 @@ if page == "Tokenizer":
     tokenizer()
 elif page == "PDFwiser":
     st.title('PDFwiser')
-    pdfwiser()
+    pdf_wiser()
