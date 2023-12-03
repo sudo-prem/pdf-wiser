@@ -5,17 +5,8 @@ from langchain.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 
-class EmbeddingSearchEngine:
-    def __init__(self, model_name='paraphrase-distilroberta-base-v1', model_type="SentenceTransformer"):
-        if model_type == "SentenceTransformer":
-            self.model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        else:
-            self.model = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
-        self.vector_db = None
-        self.storage_location = None
 
-
-    def recursive_splitter(self, data):
+def recursive_splitter(data):
         text_splitter = RecursiveCharacterTextSplitter(
             # Set a really small chunk size, just to show.
             chunk_size = 200,
@@ -26,12 +17,19 @@ class EmbeddingSearchEngine:
         texts = text_splitter.split_documents(data)
         return texts
 
-
+class EmbeddingSearchEngine:
+    def __init__(self, model_name='paraphrase-distilroberta-base-v1', model_type="SentenceTransformer"):
+        if model_type == "SentenceTransformer":
+            self.model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        else:
+            self.model = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
+        self.vector_db = None
+        self.storage_location = None
 
     def create_embeddings_for_pdf(self, pdf_file):
         loader = PyMuPDFLoader(pdf_file)
         data = loader.load()
-        texts = self.recursive_splitter(data)
+        texts = recursive_splitter(data)
         self.vector_db = Chroma.from_documents(texts, self.model)
         return self
 
