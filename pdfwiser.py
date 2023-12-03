@@ -63,6 +63,8 @@ def pdf_wiser():
         # Read the file content as bytes
         pdf_bytes = uploaded_file.read()
 
+        # create embeddings using langchain
+
         # Enter user question
         user_query = st.chat_input("Enter Question")
 

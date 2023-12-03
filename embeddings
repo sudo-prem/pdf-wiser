@@ -1,0 +1,17 @@
+from sentence_transformers import SentenceTransformer
+
+
+class EmbeddingSearchEngine:
+    def __init__(self, vector_db, model_name='paraphrase-distilroberta-base-v1', model_type):
+        self.model = SentenceTransformer(model_name)
+        self.vector_db = {}
+
+    def create_embeddings(self, text):
+        embeddings = self.model.encode([text])
+        return embeddings
+
+    def store_embeddings(self, key, embeddings):
+        pass
+
+    def search_embeddings(self, query):
+        pass
