@@ -49,7 +49,7 @@ def display_PDF(pdf_bytes):
     type="application/pdf"
     title="Embedded PDF"
     src="data:application/pdf;base64,{base64_pdf}"
-    style="overflow: auto; width: 100%; height: 42em;">"""
+    style="overflow: auto; width: 100%; height: 100em;">"""
 
     st.markdown(pdf_display, unsafe_allow_html=True)
 
