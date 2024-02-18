@@ -4,7 +4,7 @@ from io import BytesIO
 import fitz
 import tempfile
 import os
-
+from embeddings import *
 
 def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
     # Save the PDF to a temporary file
@@ -39,10 +39,8 @@ def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
 
     # Remove the temporary file
     os.remove(temp_filename)
-
-
 def display_PDF(pdf_bytes):
-    base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
+    base64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
 
     pdf_display = f"""<embed
     class="pdfobject"
@@ -57,17 +55,22 @@ def display_PDF(pdf_bytes):
 def pdf_wiser():
     # File uploader widget
     uploaded_file = st.file_uploader(
-        "Choose a PDF file", type="pdf", key="pdf_uploader")
+        "Choose a PDF file", type="pdf", key="pdf_uploader"
+    )
+
 
     if uploaded_file is not None:
+        query = st.text_input("Enter your question:")
         # Read the file content as bytes
         pdf_bytes = uploaded_file.read()
+        
+        # Clear the existing PDF display
+        st.markdown("")
 
-        # Enter user question
-        user_query = st.chat_input("Enter Question")
+        if query:
+            # Highlight the specified query and display the modified PDF
+            words = get_words(uploaded_file, query)
+            highlight_and_display_pdf(pdf_bytes, [words])
+        else:
+            display_PDF(pdf_bytes)
 
-        # Define a list of words to highlight
-        words_to_highlight = ["the", "it"]
-
-        # Highlight the specified words and display the modified PDF
-        highlight_and_display_pdf(pdf_bytes, words_to_highlight)
