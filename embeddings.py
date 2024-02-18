@@ -1,4 +1,3 @@
-import streamlit as st
 import os
 
 from langchain.vectorstores import Chroma
@@ -75,5 +74,4 @@ def get_words(uploaded_file, query):
         search_results = embedding_engine.search_embeddings(query)
         if search_results:
             return search_results[0].page_content
-        else:
-            return "hello"
+        return ""

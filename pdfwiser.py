@@ -6,7 +6,6 @@ import tempfile
 import os
 from embeddings import *
 
-
 def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
     # Save the PDF to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
@@ -40,8 +39,6 @@ def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
 
     # Remove the temporary file
     os.remove(temp_filename)
-
-
 def display_PDF(pdf_bytes):
     base64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
 
@@ -61,17 +58,19 @@ def pdf_wiser():
         "Choose a PDF file", type="pdf", key="pdf_uploader"
     )
 
+    query = st.text_input("Enter your question:")
+
     if uploaded_file is not None:
         # Read the file content as bytes
         pdf_bytes = uploaded_file.read()
-
-        words = get_words(uploaded_file, "what did clara stumble upon?")
-        # Define a list of words to highlight
-        words_to_highlight = [words]
         
-        # Highlight the specified words and display the modified PDF
-        highlight_and_display_pdf(pdf_bytes, words_to_highlight)
+        # Clear the existing PDF display
+        st.markdown("")
 
-        # Enter user question
-        # query = st.chat_input("Enter Question")
+        if query:
+            # Highlight the specified query and display the modified PDF
+            words = get_words(uploaded_file, query)
+            highlight_and_display_pdf(pdf_bytes, [words])
+        else:
+            display_PDF(pdf_bytes)
 
