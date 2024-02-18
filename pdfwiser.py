@@ -58,9 +58,9 @@ def pdf_wiser():
         "Choose a PDF file", type="pdf", key="pdf_uploader"
     )
 
-    query = st.text_input("Enter your question:")
 
     if uploaded_file is not None:
+        query = st.text_input("Enter your question:")
         # Read the file content as bytes
         pdf_bytes = uploaded_file.read()
         
