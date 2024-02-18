@@ -4,22 +4,7 @@ from io import BytesIO
 import fitz
 import tempfile
 import os
-from embeddings import EmbeddingSearchEngine
-from reportlab.pdfgen import canvas
-
-
-def read_pdf(pdf_file):
-    doc = fitz.open(pdf_file)
-    text = ""
-    for page_num in range(doc.page_count):
-        page = doc[page_num]
-        text += page.get_text()
-    return text
-
-def save_to_pdf(text, output_file):
-    pdf_canvas = canvas.Canvas(output_file)
-    pdf_canvas.drawString(72, 800, text)
-    pdf_canvas.save()
+from embeddings import *
 
 
 def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
@@ -58,14 +43,14 @@ def highlight_and_display_pdf(pdf_bytes, words_to_highlight):
 
 
 def display_PDF(pdf_bytes):
-    base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
+    base64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
 
     pdf_display = f"""<embed
     class="pdfobject"
     type="application/pdf"
     title="Embedded PDF"
     src="data:application/pdf;base64,{base64_pdf}"
-    style="overflow: auto; width: 100%; height: 42em;">"""
+    style="overflow: auto; width: 100%; height: 100em;">"""
 
     st.markdown(pdf_display, unsafe_allow_html=True)
 
@@ -73,34 +58,20 @@ def display_PDF(pdf_bytes):
 def pdf_wiser():
     # File uploader widget
     uploaded_file = st.file_uploader(
-        "Choose a PDF file", type="pdf", key="pdf_uploader")
+        "Choose a PDF file", type="pdf", key="pdf_uploader"
+    )
 
     if uploaded_file is not None:
         # Read the file content as bytes
-        print(uploaded_file.name)
+        pdf_bytes = uploaded_file.read()
 
-        text = read_pdf(uploaded_file) #
-
-        file_name = "temp_"+uploaded_file.name
-
-        save_to_pdf(text, file_name)
-
-        embedding_engine = EmbeddingSearchEngine(storage_location="temp1") #storage_location=temp_file.split(".pdf")[0] file_name.split(".pdf")[0]
-        if not embedding_engine.check_if_embeddings_exist():
-            print("Embeddings Does not Exist, so creating it")
-            embedding_engine = embedding_engine.create_embeddings_for_pdf(file_name)
+        words = get_words(uploaded_file, "what did clara stumble upon?")
+        # Define a list of words to highlight
+        words_to_highlight = [words]
+        
+        # Highlight the specified words and display the modified PDF
+        highlight_and_display_pdf(pdf_bytes, words_to_highlight)
 
         # Enter user question
-        user_query = st.chat_input("Enter Question")
+        # query = st.chat_input("Enter Question")
 
-        if user_query:
-
-            st.write(embedding_engine.search_embeddings(user_query))
-
-            # Define a list of words to highlight
-            words_to_highlight = ["the", "it"]
-
-            pdf_bytes = uploaded_file.read()
-
-            # Highlight the specified words and display the modified PDF
-            highlight_and_display_pdf(pdf_bytes, words_to_highlight)

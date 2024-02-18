@@ -64,28 +64,16 @@ class EmbeddingSearchEngine:
     def check_if_embeddings_exist(self):
         return vector_db_exists(self.storage_location)
 
-if __name__ == "__main__":
-    st.title("PDF Wiser")
-    
-    # File picker
-    uploaded_file = st.file_uploader("Upload PDF file", type="pdf")
-
-    # Text input for query
-    query = st.text_input("Enter your query")
-
+def get_words(uploaded_file, query):
     if uploaded_file is not None:
         pdf_file_path = uploaded_file.name
 
         embedding_engine = EmbeddingSearchEngine(storage_location=pdf_file_path.split(".pdf")[0])
         if not embedding_engine.check_if_embeddings_exist():
-            st.write("Embeddings do not exist, so creating one...")
             embedding_engine = embedding_engine.create_embeddings_for_pdf(pdf_file_path=pdf_file_path)
         
-        if st.button("Submit"):
-            search_results = embedding_engine.search_embeddings(query)
-            if search_results:
-                first_result_content = search_results[0].page_content
-                st.write("Most relevant answer:")
-                st.write(first_result_content)
-            else:
-                st.write("No relevant answers found.")
+        search_results = embedding_engine.search_embeddings(query)
+        if search_results:
+            return search_results[0].page_content
+        else:
+            return "hello"
