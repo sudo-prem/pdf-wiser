@@ -13,8 +13,8 @@ cd pdf-wiser
 ```
 
 ### 2. Create a Virtual Environment
-```
 Create a new Python virtual environment:
+```
 python -m venv venv
 ```
 
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ## Running the Application
 ```
-streamlit run your_script.py
+streamlit run app.py
 ```
 
 
